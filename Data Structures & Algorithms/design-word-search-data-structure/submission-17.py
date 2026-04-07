@@ -1,0 +1,40 @@
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isEnd = False
+
+class WordDictionary:
+
+    def __init__(self):
+        self.root = TrieNode()
+
+    def addWord(self, word: str) -> None:
+        curr = self.root
+
+        for w in word:
+            if w not in curr.children:
+                curr.children[w] = TrieNode()
+            curr = curr.children[w]
+
+        curr.isEnd = True
+
+    def search(self, word: str) -> bool:
+        def blind(j, root):
+            curr = root
+
+            for i in range(j, len(word)):
+                c = word[i]
+                if c == '.':
+                    for value in curr.children.values():
+                        if blind(i + 1, value):
+                            return True
+                    return False
+                else:
+                    if c not in curr.children:
+                        return False
+                    curr = curr.children[c]
+            return curr.isEnd
+
+        return blind(0, self.root)
+
+
